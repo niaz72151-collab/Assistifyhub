@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AssistifyHub</title>
+  <style>
+    body {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: black;
+      text-align: center;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    .logo {
+      width: 150px;
+      margin-top: 20px;
+    }
+    .tools-section {
+      margin-top: 40px;
+      padding: 20px;
+    }
+    .tool-card {
+      max-width: 600px;
+      margin: 10px auto;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: #f9f9f9;
+      text-align: left;
+    }
+    .tool-card h3 {
+      margin-top: 0;
+      color: #ff6600;
+    }
+    .tool-card a {
+      color: blue;
+      text-decoration: none;
+    }
+    .stars {
+      display: inline-block;
+      direction: rtl;
+      unicode-bidi: bidi-override;
+      font-size: 50px;
+      cursor: pointer;
+    }
+    .stars input {
+      display: none;
+    }
+    .stars label {
+      color: #ccc;
+    }
+    .stars input:checked ~ label,
+    .stars label:hover,
+    .stars label:hover ~ label {
+      color: orange;
+    }
+    .rating-section {
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+  <img src="https://i.ibb.co/prh5yx2b/logo.jpg" alt="AssistifyHub Logo" class="logo">
+  <h1>Welcome to AssistifyHub.com</h1>
+
+  <!-- AI Tools Section -->
+  <div class="tools-section">
+    <h2>AI Tools You Can Try</h2>
+
+    <div class="tool-card">
+      <h3><a href="https://chat.openai.com/" target="_blank">ChatGPT Assistant</a></h3>
+      <p>Ask questions, brainstorm ideas, or get instant help with almost anything using OpenAI's ChatGPT.</p>
+    </div>
+
+    <div class="tool-card">
+    <h3><a href="https://www.copy.ai" target="_blank">AI Text Generator (Copy.ai)</a></h3>
+      <p>Create blog posts, social media captions, or even full articles in seconds using AI-powered text generation.</p>
+    </div>
+
+    <div class="tool-card">
+      <h3><a href="https://www.canva.com/ai-image-generator/" target="_blank">AI Image Creator (Canva)</a></h3>
+      <p>Generate stunning graphics, logos, or artwork just by typing what you want. No design skills required.</p>
+    </div>
+
+    <div class="tool-card">
+      <h3><a href="https://speechnotes.co/" target="_blank">Speech-to-Text Converter</a></h3>
+      <p>Turn your voice recordings into accurate, editable text in real time.</p>
+    </div>
+
+  </div>
+
+  <!-- Rating Section at End -->
+  <div class="rating-section">
+    <h2>Rate Our Website</h2>
+    <form class="stars">
+      <input type="radio" name="star" id="star5" value="5"><label for="star5">★</label>
+      <input type="radio" name="star" id="star4" value="4"><label for="star4">★</label>
+      <input type="radio" name="star" id="star3" value="3"><label for="star3">★</label>
+      <input type="radio" name="star" id="star2" value="2"><label for="star2">★</label>
+      <input type="radio" name="star" id="star1" value="1"><label for="star1">★</label>
+    </form>
+
+    <p id="yourRating"></p>
+    <p id="avgRating"></p>
+  </div>
+
+  <script>
+    const stars = document.querySelectorAll('input[name="star"]');
+    const yourRating = document.getElementById('yourRating');
+    const avgRating = document.getElementById('avgRating');
+
+    let totalRatings = parseInt(localStorage.getItem('totalRatings')) || 10;
+    let sumRatings = parseInt(localStorage.getItem('sumRatings')) || 40;
+
+    function updateAverage() {
+      let avg = (sumRatings / totalRatings).toFixed(1);
+      avgRating.textContent = `Average rating: ${avg} ⭐ (${totalRatings} users)`;
+    }
+
+    let userRated = localStorage.getItem('userRating');
+    if (userRated) {
+      document.getElementById('star' + userRated).checked = true;
+      yourRating.textContent = `You rated this website: ${userRated} star(s)`;
+    }
+
+    stars.forEach(star => {
+      star.addEventListener('change', () => {
+        let val = parseInt(star.value);
+        if (!userRated) {
+          totalRatings++;
+          sumRatings += val;
+          localStorage.setItem('userRating', val);
+          localStorage.setItem('totalRatings', totalRatings);
+          localStorage.setItem('sumRatings', sumRatings);
+          yourRating.textContent = `You rated this website: ${val} star(s)`;
+          updateAverage();
+        } else {
+          alert("You have already rated!");
+        }
+      });
+    });
+
+    updateAverage();
+  </script>
+</body>
+</html>
